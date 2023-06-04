@@ -1,0 +1,86 @@
+# Virtual Host configuration for mirror.mwt.me
+
+server {
+
+    root /srv/www/mirror.mwt.me;
+
+    server_name mirror.mwt.me mirror-ny-p.mwt.me mirror-ny-s.mwt.me mirror-lu-p.mwt.me mirror-lu-s.mwt.me;
+
+    # set mime type to text
+    default_type text/plain;
+
+    # redirect homepage to mirrors page
+    location = / {
+        return 301 https://www.matthewthom.as/mirrors/;
+    }
+
+    location / {
+        # First attempt to serve request as file, then
+        # as directory, then fall back to displaying a 404.
+        try_files $uri $uri/ =404;
+
+        # official Debian repos also use 2m
+        expires 2m;
+
+        # serve stale from if server is down for up to 12hr and for 6hr while revalidating
+        add_header Cache-Control "stale-while-revalidate=21600, stale-if-error=43200, no-transform";
+
+        # enable fancyindex
+        fancyindex on;
+        fancyindex_exact_size off;
+        fancyindex_footer /internal/fancyindex/footer.html;
+        fancyindex_header /internal/fancyindex/header.html;
+        fancyindex_show_path off;
+        fancyindex_time_format "%b %e, %Y";
+
+        location ^~ /internal {
+            internal;
+        }
+
+        location /assets {
+            expires 4d;
+        }
+
+        location /ctan {
+            # there could be binaries in ctan repo
+            default_type application/octet-stream;
+            add_header Surrogate-Control "max-age=21600";
+        }
+
+        # package files have version numbers in their names
+        # should be cached for a long time
+        location ~* \.(deb|rpm)$ {
+            expires 1y;
+        }
+
+        # let's not cache index pages for too long
+        location ~ /$ {
+            expires 1m;
+        }
+
+        # use SSI on install.sh (only allow one folder deep)
+        location ~* ^/(?!ctan/)(?<foldername>[^/]+)/install\.sh$ {
+            ssi on;
+            ssi_types *;
+            set $inc_foldername $foldername;
+        }
+
+        # Errors for legacy ghd
+        location ^~ /ghd {
+            # Override default mime types to text/plain
+            types { } default_type text/plain;
+            return 410 'Error: this repository is depreciated by the developer. Please see: https://mirror.mwt.me/shiftkey-desktop/';
+        }
+    }
+
+    listen [::]:443 ssl;
+    listen 443 ssl;
+    ssl_certificate /etc/letsencrypt/live/mwt.me/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/mwt.me/privkey.pem;
+    include /etc/letsencrypt/options-ssl-nginx.conf;
+    ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem;
+
+    listen [::]:80;
+    listen 80;
+
+}
