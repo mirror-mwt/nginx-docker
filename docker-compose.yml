@@ -1,0 +1,12 @@
+version: "3.3"
+
+services:
+  mirror-nginx:
+    container_name: mirror-nginx
+    build:
+      context: .
+      dockerfile: Dockerfile
+    network_mode: host
+    volumes:
+      - /mnt/storage/mirror:/mirror:ro
+    restart: "unless-stopped"
