@@ -3,7 +3,8 @@ FROM debian:bookworm-slim
 RUN apt-get update \
     && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
     nginx-core libnginx-mod-http-fancyindex \
-    curl ca-certificates
+    curl ca-certificates \
+    ssl-cert
 
 COPY nginx/mirror /etc/nginx/sites-enabled/mirror
 

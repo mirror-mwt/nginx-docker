@@ -75,10 +75,7 @@ server {
 
     listen [::]:443 ssl;
     listen 443 ssl;
-    ssl_certificate /etc/letsencrypt/live/mwt.me/fullchain.pem;
-    ssl_certificate_key /etc/letsencrypt/live/mwt.me/privkey.pem;
-    include /etc/letsencrypt/options-ssl-nginx.conf;
-    ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem;
+    include snippets/snakeoil.conf;
 
     listen [::]:80;
     listen 80;
