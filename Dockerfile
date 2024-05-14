@@ -8,6 +8,8 @@ RUN apt-get update \
 
 COPY nginx/mirror /etc/nginx/sites-enabled/mirror
 
-RUN curl -L https://github.com/mirror-mwt/mwt-fancyindex-theme/archive/refs/heads/main.tar.gz | tar xz -C /
+COPY --chmod=0755 setup-web-root.sh /setup-web-root.sh
+
+RUN ["/setup-web-root.sh"]
 
 CMD ["nginx", "-g", "daemon off;"]

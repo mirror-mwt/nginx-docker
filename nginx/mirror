@@ -2,7 +2,7 @@
 
 server {
 
-    root /srv/www/mirror.mwt.me;
+    root /srv/www;
 
     server_name mirror.mwt.me mirror-ny-p.mwt.me mirror-ny-s.mwt.me mirror-lu-p.mwt.me mirror-lu-s.mwt.me;
 
@@ -28,8 +28,8 @@ server {
         # enable fancyindex
         fancyindex on;
         fancyindex_exact_size off;
-        fancyindex_footer /internal/fancyindex/footer.html;
-        fancyindex_header /internal/fancyindex/header.html;
+        fancyindex_footer /internal/footer.html;
+        fancyindex_header /internal/header.html;
         fancyindex_show_path off;
         fancyindex_time_format "%b %e, %Y";
 
