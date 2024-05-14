@@ -39,6 +39,7 @@ server {
 
         location /assets {
             expires 4d;
+            alias /srv/www/internal/assets;
         }
 
         location /ctan {

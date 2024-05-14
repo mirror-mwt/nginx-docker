@@ -29,7 +29,6 @@ EOF
 while read link; do
 	ln -s $link
 done <<-EOF
-	./internal/assets ./assets
 	/mirror/tex-archive ./ctan
 	/mirror/rclone/deb ./rclone/deb
 	/mirror/rclone/rpm ./rclone/rpm
