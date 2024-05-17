@@ -14,19 +14,21 @@ cd /srv/www
 #####################################################################
 
 # Loop through a list of directories to create
-while read dir; do
+while read -r dir; do
 	mkdir -p "$dir"
 done <<-EOF
 	internal
 	rclone
 	zoom
+	rstudio
 	shiftkey-desktop
 	termux
 	zotero
 EOF
 
 # Loop through a list of simlinks to create
-while read link; do
+# shellcheck disable=SC2086
+while read -r link; do
 	ln -s $link
 done <<-EOF
 	/mirror/tex-archive ./ctan
@@ -34,6 +36,8 @@ done <<-EOF
 	/mirror/rclone/rpm ./rclone/rpm
 	/mirror/zoom/deb ./zoom/deb
 	/mirror/zoom/rpm ./zoom/rpm
+	/mirror/rstudio/deb ./rstudio/deb
+	/mirror/rstudio/rpm ./rstudio/rpm
 	/mirror/apt-mirror/mirror/apt.packages.shiftkey.dev/ubuntu ./shiftkey-desktop/deb
 	/mirror/dnf-reposync/shiftkey ./shiftkey-desktop/rpm
 	/mirror/termux/termux-main ./termux/main
@@ -81,6 +85,7 @@ get_stub() {
 }
 
 # Generate the stub for rclone
+# shellcheck disable=SC2016
 get_stub '$BASE_URL/deb any main' '[$APP_NAME]
 name=$APP_NAME
 baseurl=$BASE_URL/rpm/\$basearch
@@ -90,6 +95,7 @@ repo_gpgcheck=1
 gpgkey=file:///etc/pki/rpm-gpg/$APP_NAME.asc' >./rclone/install.sh
 
 # Generate the stub for zoom
+# shellcheck disable=SC2016
 get_stub '$BASE_URL/deb any main' '[$APP_NAME]
 name=$APP_NAME
 baseurl=$BASE_URL/rpm/\$basearch
@@ -98,7 +104,18 @@ gpgcheck=0
 repo_gpgcheck=1
 gpgkey=file:///etc/pki/rpm-gpg/$APP_NAME.asc' >./zoom/install.sh
 
+# Generate the stub for rstudio
+# shellcheck disable=SC2016
+get_stub '$BASE_URL/deb/jammy jammy main' '[$APP_NAME]
+name=$APP_NAME
+baseurl=$BASE_URL/rpm/el9/\$basearch
+enabled=1
+gpgcheck=0
+repo_gpgcheck=1
+gpgkey=file:///etc/pki/rpm-gpg/$APP_NAME.asc' >./rstudio/install.sh
+
 # Generate the stub for shiftkey-desktop
+# shellcheck disable=SC2016
 get_stub '$BASE_URL/deb any main' '[$APP_NAME]
 name=GitHub Desktop
 baseurl=$BASE_URL/rpm
@@ -108,6 +125,7 @@ repo_gpgcheck=1
 gpgkey=file:///etc/pki/rpm-gpg/$APP_NAME.asc' >./shiftkey-desktop/install.sh
 
 # Generate the stub for zotero
+# shellcheck disable=SC2016
 get_stub '$BASE_URL/deb/ ./' >./zotero/install.sh
 
 #####################################################################
@@ -115,7 +133,7 @@ get_stub '$BASE_URL/deb/ ./' >./zotero/install.sh
 #####################################################################
 
 # Create the keyfiles for my self-signed repositories
-tee ./rclone/gpgkey ./zoom/gpgkey >/dev/null <<-'EOF'
+tee ./rclone/gpgkey ./zoom/gpgkey ./rstudio/gpgkey >/dev/null <<-'EOF'
 	-----BEGIN PGP PUBLIC KEY BLOCK-----
 
 	mQINBGISxKwBEAC+EyYLsKTvF63M+y5YGdSjwo5CWQMaTXMGIXcTuIiWi2qN8um5
