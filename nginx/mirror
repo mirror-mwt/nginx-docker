@@ -72,6 +72,20 @@ server {
             types { } default_type text/plain;
             return 410 'Error: this repository is depreciated by the developer. Please see: https://mirror.mwt.me/shiftkey-desktop/';
         }
+
+        # Deal with legacy /my/ repos (note we direct main to zoom because it's more popular)
+        location ^~ /my {
+            rewrite ^/my/deb/dists/any/rstudio/(.*)$ /rstudio/deb/focal/dists/focal/main/$1 redirect;
+            rewrite ^/my/deb/dists/any/(?:main|zoom)/(.*)$ /zoom/deb/dists/any/main/$1 redirect;
+            rewrite ^/my/deb/dists/any/(.*)$ /zoom/deb/dists/any/$1 redirect;
+
+            rewrite ^/my/deb/pool/(?:main|zoom)/z/zoom/(.*)$ /zoom/deb/pool/main/z/zoom/$1 redirect;
+            rewrite ^/my/deb/pool/(?:main|rstudio)/r/rstudio/(.*)$ /rstudio/deb/focal/pool/main/r/rstudio/$1 redirect;
+
+            # Override default mime types to text/plain
+            types { } default_type text/plain;
+            return 410 'Error: this repository is depreciated. Please see: https://mirror.mwt.me/zoom/ or https://mirror.mwt.me/rstudio/';
+        }
     }
 
     listen [::]:443 ssl;
