@@ -1,5 +1,8 @@
 #!/bin/sh 
 
+# Fail on first error
+set -e
+
 # Install the theme for fancyindex into the internal directory
 curl -L https://github.com/mirror-mwt/mwt-fancyindex-theme/archive/refs/heads/main.tar.gz |
 tar xz -C /srv/www/internal --strip-components=2 mwt-fancyindex-theme-main/dist
