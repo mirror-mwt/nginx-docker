@@ -9,7 +9,8 @@ RUN apt-get update \
 COPY nginx/mirror /etc/nginx/sites-enabled/mirror
 
 COPY --chmod=0755 setup-web-root.sh /setup-web-root.sh
+COPY --chmod=0755 entrypoint.sh /entrypoint.sh
 
 RUN ["/setup-web-root.sh"]
 
-CMD ["nginx", "-g", "daemon off;"]
+ENTRYPOINT ["/entrypoint.sh"]

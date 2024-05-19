@@ -46,13 +46,6 @@ done <<-EOF
 	/mirror/apt-mirror/mirror/zotero.retorque.re/file/apt-package-archive ./zotero/deb
 EOF
 
-# Install the theme for fancyindex into the internal directory
-curl -L https://github.com/mirror-mwt/mwt-fancyindex-theme/archive/refs/heads/main.tar.gz |
-	tar xz -C ./internal --strip-components=2 mwt-fancyindex-theme-main/dist
-
-# Install the universal installation script into the internal directory
-curl -L https://gist.githubusercontent.com/mwt/1bc605c6fbcef451142cf145b8518439/raw/install.sh -o ./internal/universal-install.sh
-
 #####################################################################
 # Install all of the universal installation stubs
 #####################################################################
@@ -237,3 +230,6 @@ tee ./zotero/gpgkey >/dev/null <<-'EOF'
 	=Toat
 	-----END PGP PUBLIC KEY BLOCK-----
 EOF
+
+# Delete this script
+rm "/setup-web-root.sh"
