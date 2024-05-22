@@ -1,5 +1,3 @@
-version: "3.3"
-
 services:
   mirror-nginx:
     container_name: mirror-nginx
