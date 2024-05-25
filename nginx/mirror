@@ -84,7 +84,7 @@ server {
 
             # Override default mime types to text/plain
             types { } default_type text/plain;
-            return 410 'Error: this repository is depreciated. Please see: https://mirror.mwt.me/zoom/ or https://mirror.mwt.me/rstudio/';
+            return 300 'Error: the packages in this repository have moved. Please see:\n - https://mirror.mwt.me/zoom/\n - https://mirror.mwt.me/rstudio/\n';
         }
     }
 
