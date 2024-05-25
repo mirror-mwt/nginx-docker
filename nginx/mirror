@@ -75,9 +75,9 @@ server {
 
         # Deal with legacy /my/ repos (note we direct main to zoom because it's more popular)
         location ^~ /my {
-            rewrite ^/my/deb/dists/any/main/(.*)$ /zoom/deb/dists/any/main/$1 redirect;
-
-            rewrite ^/my/deb/pool/main/z/zoom/(.*)$ /zoom/deb/pool/main/z/zoom/$1 redirect;
+            # Redirect correctly specified paths to zoom repo
+            rewrite ^/my/deb/dists/any/(.*)$ /zoom/deb/dists/any/$1 redirect;
+            rewrite ^/my/deb/pool/main/(.*)$ /zoom/deb/pool/main/$1 redirect;
   
             # Override default mime types to text/plain
             types { } default_type text/plain;
